@@ -1,4 +1,4 @@
-const {createStore} = require("redux")
+const {createStore, combineReducers} = require("redux")
 
 
 //Declare State
@@ -27,3 +27,38 @@ const addCart = (cartValue) =>{
     }
 }
 //Reducer
+const addProductReducer = (state = initialProduct, action) =>{
+    switch (action.type) {
+        case ADD_PRODUCT:
+            return {
+                product : [...state.product, action.payload],
+                numOfProduct : numOfProduct + 1
+            }
+        default:
+            return state
+            break;
+    }
+}
+const addCartReducer = (state = initialCart, action) =>{
+        switch (action.type) {
+            case ADD_CART :
+                return{
+                    product : [...state.product, action.payload],
+                    numOfProduct : numOfProduct + 1
+                }
+            default:
+                state
+                break;
+        }
+}
+//Store
+const rootReducer = combineReducers({
+    addProduct : addProductReducer,
+    addCart : addCartReducer
+})
+const store = createStore(rootReducer)
+store.subscribe(()=>{
+    console.log(store.getState());
+})
+store.dispatch(addProduct('salt'))
+store.dispatch(addCart('sugar'))
